@@ -2677,6 +2677,33 @@
         function colorFor(name) {
           return palette[Math.abs(lanes.indexOf(name)) % palette.length];
         }
+        function esc(s) {
+          return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+        function printBoard() {
+          const w = window.open("", "_blank");
+          const headerCells = days.map(function(d) {
+            return '<th style="border:1px solid #999;padding:6px;background:#f1f5f9;font-size:11px">' + fmtD(d) + "</th>";
+          }).join("");
+          const rows2 = lanes.map(function(lane) {
+            const cells = days.map(function(d) {
+              const cs = cardsFor(lane, d);
+              const items = cs.map(function(c) {
+                const flag = c.constraint && c.constraint !== "None" ? '<div style="color:#b91c1c;font-size:9px;margin-top:2px">' + esc(c.constraint) + "</div>" : "";
+                const done = c.status === "Complete";
+                return '<div style="border:1px solid #ccc;border-radius:6px;padding:6px 8px;margin-bottom:5px;font-size:11px;' + (done ? "text-decoration:line-through;opacity:.55;" : "") + '"><strong>' + esc(c.activity) + '</strong><br><span style="color:#555">' + esc(c.trade || "") + "</span>" + flag + "</div>";
+              }).join("");
+              return '<td style="border:1px solid #999;padding:6px;vertical-align:top;width:130px">' + items + "</td>";
+            }).join("");
+            return '<tr><td style="border:1px solid #999;padding:6px;font-weight:bold;background:#f8fafc;font-size:12px">' + esc(lane) + "</td>" + cells + "</tr>";
+          }).join("");
+          const html = '<html><head><title>Pull Plan Board</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#111}table{border-collapse:collapse;width:100%}h2{margin:0 0 4px}</style></head><body><h2>Pull Plan Board</h2><div style="margin-bottom:14px;color:#555;font-size:13px">Week of ' + fmtD(days[0]) + '</div><table><thead><tr><th style="border:1px solid #999;padding:6px;background:#f8fafc;font-size:11px">Trade / Company</th>' + headerCells + "</tr></thead><tbody>" + rows2 + "</tbody></table></body></html>";
+          w.document.write(html);
+          w.document.close();
+          setTimeout(function() {
+            w.print();
+          }, 300);
+        }
         const bd = "0.5px solid " + (dark ? "#2a3146" : "#e2e8f0");
         return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, fontWeight: 700 } }, "Pull Plan Board"), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, ...S.text3, background: dark ? "#1a1f2e" : "#f1f5f9", padding: "3px 10px", borderRadius: 8 } }, "Week of ", fmtD(days[0]))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement("button", { onClick: function() {
           setWkOff(function(w) {
@@ -2690,7 +2717,7 @@
           });
         }, style: S.btnS }, "Next"), /* @__PURE__ */ React.createElement("button", { onClick: addLane, style: { ...S.btnP, background: "#06B6D4" } }, "+ Add Trade/Company"), /* @__PURE__ */ React.createElement("button", { onClick: function() {
           openAdd("pullplan");
-        }, style: { ...S.btnP, background: "#06B6D4" } }, "+ New Activity"))), /* @__PURE__ */ React.createElement("div", { style: { overflowX: "auto" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "150px repeat(5,minmax(150px,1fr))", minWidth: 900, border: bd, borderRadius: 12, overflow: "hidden" } }, /* @__PURE__ */ React.createElement("div", { style: { background: dark ? "#161b29" : "#f8fafc", padding: "10px 12px", fontSize: 11, ...S.text3, borderBottom: bd, borderRight: bd } }, "TRADE / COMPANY"), days.map(function(d, i) {
+        }, style: { ...S.btnP, background: "#06B6D4" } }, "+ New Activity"), /* @__PURE__ */ React.createElement("button", { onClick: printBoard, style: S.btnS }, "Print / PDF"))), /* @__PURE__ */ React.createElement("div", { style: { overflowX: "auto" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "150px repeat(5,minmax(150px,1fr))", minWidth: 900, border: bd, borderRadius: 12, overflow: "hidden" } }, /* @__PURE__ */ React.createElement("div", { style: { background: dark ? "#161b29" : "#f8fafc", padding: "10px 12px", fontSize: 11, ...S.text3, borderBottom: bd, borderRight: bd } }, "TRADE / COMPANY"), days.map(function(d, i) {
           return /* @__PURE__ */ React.createElement("div", { key: i, style: { background: dark ? "#161b29" : "#f8fafc", padding: "10px 12px", fontSize: 11, fontWeight: 700, borderBottom: bd, borderRight: i < 4 ? bd : "none" } }, fmtD(d));
         }), lanes.map(function(lane, li) {
           return /* @__PURE__ */ React.createElement(React.Fragment, { key: lane }, /* @__PURE__ */ React.createElement("div", { style: { padding: "10px 12px", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6, borderBottom: li < lanes.length - 1 ? bd : "none", borderRight: bd } }, /* @__PURE__ */ React.createElement("span", { onClick: function() {
