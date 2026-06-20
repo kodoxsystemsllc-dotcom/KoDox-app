@@ -2213,16 +2213,21 @@
         const [fetchingWeather, setFetchingWeather] = useState(false);
         const [aiWriting, setAiWriting] = useState(false);
         async function aiWriteReport() {
+          const hasData = f.manpower || f.tradeBreakdown || f.location || f.materialDeliveries || f.delays && f.delays !== "None" || f.visitors || f.safety || f.notes;
+          if (!hasData) {
+            alert("Fill in at least one field first (manpower, location, trade breakdown, deliveries, delays, visitors, or safety notes) so the AI has something real to work from.");
+            return;
+          }
           setAiWriting(true);
           try {
-            const ctx = `Project manpower: ${f.manpower || "unknown"} workers, ${f.hoursWorked || "unknown"} hrs each. Trade breakdown: ${f.tradeBreakdown || "not specified"}. Location/Area: ${f.location || "not specified"}. Weather: ${f.weather || "Clear"}, ${f.tempLow || ""}-${f.tempHigh || ""}F. Material deliveries: ${f.materialDeliveries || "none"}. Delays: ${f.delays || "None"}. Visitors: ${f.visitors || "none"}. Safety notes: ${f.safety || "none"}. Existing notes from super: ${f.workPerformed || f.notes || "(none yet, write a generic but plausible mechanical/plumbing construction update based on the above)"}`;
+            const ctx = `Project manpower: ${f.manpower || "unknown"} workers, ${f.hoursWorked || "unknown"} hrs each. Trade breakdown: ${f.tradeBreakdown || "not specified"}. Location/Area: ${f.location || "not specified"}. Weather: ${f.weather || "Clear"}, ${f.tempLow || ""}-${f.tempHigh || ""}F. Material deliveries: ${f.materialDeliveries || "none"}. Delays: ${f.delays || "None"}. Visitors: ${f.visitors || "none"}. Safety notes: ${f.safety || "none"}. Existing notes from super: ${f.workPerformed || f.notes || "(none)"}`;
             const res = await fetch("https://claudeproxy-rkvcepcpza-uc.a.run.app", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 model: "claude-sonnet-4-6",
                 max_tokens: 500,
-                system: "You are a construction superintendent's assistant. Write a concise, professional 'Work Performed Today' narrative paragraph for a daily field log, based on the data given. Use plain, factual, third-person field-report language. No headers, no bullet points, just 2-4 sentences of solid prose suitable for a legal daily record.",
+                system: "You are a construction superintendent's assistant. Write a concise, professional 'Work Performed Today' narrative paragraph for a daily field log, using ONLY the data given. Do not invent specifics (trades, quantities, tasks) that aren't in the data. If a field is missing, simply omit it rather than guessing. Use plain, factual, third-person field-report language. No headers, no bullet points, just 2-4 sentences of solid prose suitable for a legal daily record.",
                 messages: [{ role: "user", content: ctx }]
               })
             });
