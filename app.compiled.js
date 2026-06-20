@@ -2263,12 +2263,33 @@
             (pos) => {
               const lat = pos.coords.latitude.toFixed(2);
               const lon = pos.coords.longitude.toFixed(2);
-              fetch("https://wttr.in/?format=%t+%h+%w&lang=en").then((r) => r.text()).then((txt) => {
+              fetch("https://wttr.in/" + lat + "," + lon + "?format=j1").then((r) => {
+                if (!r.ok) throw new Error("bad response");
+                return r.json();
+              }).then((data) => {
                 setFetchingWeather(false);
-                sf((p) => ({ ...p, notes: (p.notes || "") + (p.notes ? "\n" : "") + "Weather fetched: " + txt.trim() }));
-              }).catch(() => showWeatherFallback());
+                const cur = data.current_condition && data.current_condition[0];
+                if (!cur) {
+                  showWeatherFallback();
+                  return;
+                }
+                sf((p) => ({
+                  ...p,
+                  weather: cur.weatherDesc && cur.weatherDesc[0] ? cur.weatherDesc[0].value : p.weather,
+                  tempHigh: cur.temp_F || p.tempHigh,
+                  tempLow: cur.temp_F || p.tempLow,
+                  humidity: cur.humidity || p.humidity,
+                  windSpeed: cur.windspeedMiles || p.windSpeed
+                }));
+              }).catch(() => {
+                setFetchingWeather(false);
+                showWeatherFallback();
+              });
             },
-            () => showWeatherFallback()
+            () => {
+              setFetchingWeather(false);
+              showWeatherFallback();
+            }
           );
         }
         function showWeatherFallback() {
