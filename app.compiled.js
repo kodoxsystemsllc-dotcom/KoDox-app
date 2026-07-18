@@ -25099,10 +25099,40 @@ ${summaryCards.map(
         ));
       }
       function DocHubTab({ S, darkMode, projects, selProj }) {
-        const CATEGORIES = [{ id: "all", label: "All Documents" }, { id: "drawing", label: "Drawings" }, { id: "submittal", label: "Submittals" }, { id: "rfi", label: "RFIs" }, { id: "bom", label: "BOMs" }, { id: "schedule", label: "Schedules" }, { id: "co", label: "Change Orders" }, { id: "misc", label: "Misc" }];
+        const CATEGORIES = [
+          { id: "all", label: "All Documents" },
+          { id: "drawing", label: "Drawings" },
+          { id: "submittal", label: "Submittals" },
+          { id: "rfi", label: "RFIs" },
+          { id: "bom", label: "BOMs" },
+          { id: "schedule", label: "Schedules" },
+          { id: "co", label: "Change Orders" },
+          { id: "misc", label: "Misc" }
+        ];
         const [activeCat, setActiveCat] = React.useState("all");
+        const [docs, setDocs] = React.useState([]);
+        const [dragOver, setDragOver] = React.useState(false);
+        const [stagedCat, setStagedCat] = React.useState("drawing");
+        const fileInputRef = React.useRef(null);
         const dark = darkMode;
-        return /* @__PURE__ */ React.createElement("div", { style: { padding: "24px", maxWidth: 1100, margin: "0 auto" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 24 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 28 } }, "??"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 22, fontWeight: 700, ...S.text } }, "Document Hub"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, ...S.text2, marginTop: 2 } }, "All project documents in one place"))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 } }, CATEGORIES.map((cat) => /* @__PURE__ */ React.createElement("button", { key: cat.id, onClick: () => setActiveCat(cat.id), style: { padding: "6px 16px", borderRadius: 20, border: activeCat === cat.id ? "none" : dark ? "1px solid rgba(255,255,255,0.15)" : "1px solid #d1d5db", background: activeCat === cat.id ? "#2563eb" : "transparent", color: activeCat === cat.id ? "#fff" : dark ? "#cbd5e1" : "#374151", fontWeight: activeCat === cat.id ? 600 : 400, fontSize: 13, cursor: "pointer" } }, cat.label))), /* @__PURE__ */ React.createElement("div", { style: { border: dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid #e5e7eb", borderRadius: 12, padding: "48px 24px", textAlign: "center", background: dark ? "rgba(255,255,255,0.02)" : "#f9fafb" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 40, marginBottom: 12 } }, "??"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 16, fontWeight: 600, ...S.text, marginBottom: 8 } }, "No documents yet"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, ...S.text2 } }, "Upload coming next.")));
+        const handleFiles = (files) => {
+          Array.from(files).forEach((f) => {
+            setDocs((prev) => [...prev, { id: Date.now() + Math.random(), name: f.name, size: f.size, type: f.type, category: stagedCat, uploadedAt: (/* @__PURE__ */ new Date()).toLocaleDateString(), file: f }]);
+          });
+        };
+        const fmtSize = (b) => b < 1024 ? b + " B" : b < 1048576 ? (b / 1024).toFixed(1) + " KB" : (b / 1048576).toFixed(1) + " MB";
+        const filtered = activeCat === "all" ? docs : docs.filter((d) => d.category === activeCat);
+        return /* @__PURE__ */ React.createElement("div", { style: { padding: "24px", maxWidth: 1100, margin: "0 auto" } }, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 24 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 22, fontWeight: 700, ...S.text } }, "Document Hub"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, ...S.text2, marginTop: 2 } }, "All project documents in one place")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 } }, CATEGORIES.map((cat) => /* @__PURE__ */ React.createElement("button", { key: cat.id, onClick: () => setActiveCat(cat.id), style: { padding: "6px 16px", borderRadius: 20, border: activeCat === cat.id ? "none" : dark ? "1px solid rgba(255,255,255,0.15)" : "1px solid #d1d5db", background: activeCat === cat.id ? "#2563eb" : "transparent", color: activeCat === cat.id ? "#fff" : dark ? "#cbd5e1" : "#374151", fontWeight: activeCat === cat.id ? 600 : 400, fontSize: 13, cursor: "pointer" } }, cat.label))), /* @__PURE__ */ React.createElement("div", { onDragOver: (e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }, onDragLeave: () => setDragOver(false), onDrop: (e) => {
+          e.preventDefault();
+          setDragOver(false);
+          handleFiles(e.dataTransfer.files);
+        }, onClick: () => fileInputRef.current && fileInputRef.current.click(), style: { border: dragOver ? "2px dashed #2563eb" : dark ? "2px dashed rgba(255,255,255,0.15)" : "2px dashed #d1d5db", borderRadius: 12, padding: "36px 24px", textAlign: "center", background: dragOver ? dark ? "rgba(37,99,235,0.1)" : "#eff6ff" : dark ? "rgba(255,255,255,0.02)" : "#f9fafb", cursor: "pointer", marginBottom: 20, transition: "all 0.15s" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32, marginBottom: 8 } }, "+"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 15, fontWeight: 600, ...S.text, marginBottom: 4 } }, "Drop files here or click to browse"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text2, marginBottom: 16 } }, "PDF, Excel, Word, JPG, PNG and more"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, ...S.text2 } }, "Category:"), /* @__PURE__ */ React.createElement("select", { value: stagedCat, onChange: (e) => {
+          e.stopPropagation();
+          setStagedCat(e.target.value);
+        }, onClick: (e) => e.stopPropagation(), style: { fontSize: 12, padding: "4px 8px", borderRadius: 6, border: dark ? "1px solid rgba(255,255,255,0.2)" : "1px solid #d1d5db", background: dark ? "#1e293b" : "#fff", color: dark ? "#e2e8f0" : "#374151" } }, CATEGORIES.filter((c) => c.id !== "all").map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.label)))), /* @__PURE__ */ React.createElement("input", { ref: fileInputRef, type: "file", multiple: true, style: { display: "none" }, onChange: (e) => handleFiles(e.target.files) })), filtered.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "32px", ...S.text2, fontSize: 13 } }, "No documents in this category yet.") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, filtered.map((doc) => /* @__PURE__ */ React.createElement("div", { key: doc.id, style: { display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 10, border: dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid #e5e7eb", background: dark ? "rgba(255,255,255,0.03)" : "#fff" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: "#2563eb", minWidth: 36 } }, doc.type && doc.type.includes("pdf") ? "PDF" : doc.type && doc.type.includes("image") ? "IMG" : "DOC"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, fontWeight: 600, ...S.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, doc.name), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text2 } }, fmtSize(doc.size), " - ", CATEGORIES.find((c) => c.id === doc.category)?.label, " - ", doc.uploadedAt)), /* @__PURE__ */ React.createElement("button", { onClick: () => setDocs((prev) => prev.filter((d) => d.id !== doc.id)), style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid #ef4444", background: "transparent", color: "#ef4444", cursor: "pointer" } }, "Remove")))));
       }
       function DrawingsTab({
         S,
