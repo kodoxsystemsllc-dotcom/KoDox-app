@@ -1623,10 +1623,6 @@ ${summaryCards.map(
         { id: "toolinventory", icon: "\u{1F528}", label: "Tool Inventory" },
         { divider: "PROJECT DOCS" },
         { id: "dochub", icon: "\u{1F4C1}", label: "Document Hub" },
-        { id: "drawings", icon: "\u{1F4DC}", label: "Drawings" },
-        { id: "projspecs", icon: "\u{1F4D0}", label: "Project Specifications" },
-        { id: "projdocs", icon: "\u{1F5C2}", label: "Project Documents" },
-        { id: "projforms", icon: "\u{1F5C3}", label: "Project Forms" },
         { id: "projdir", icon: "\u{1F4D2}", label: "Project Directory" },
         { divider: "ADMIN" },
         { id: "instructions", icon: "\u{1F4D6}", label: "How To Guide" },
@@ -2608,11 +2604,7 @@ ${summaryCards.map(
         const [qualityInsp, setQualityInsp] = usePersist("qualityInsp", []);
         const [qualityObs, setQualityObs] = usePersist("qualityObs", []);
         const [qualityForms, setQualityForms] = usePersist("qualityForms", []);
-        const [projDocs, setProjDocs] = usePersist("projDocs", []);
         const [projDir, setProjDir] = usePersist("projDir", []);
-        const [projSpecs, setProjSpecs] = usePersist("projSpecs", []);
-        const [projForms, setProjForms] = usePersist("projForms", []);
-        const [drawings, setDrawings] = usePersist("drawings", []);
         const [changeOrders, setChangeOrders] = usePersist("changeOrders", []);
         const [purchaseOrders, setPurchaseOrders] = usePersist("purchaseOrders", []);
         const [settings, setSettings] = usePersist("settings", {
@@ -3304,9 +3296,7 @@ ${summaryCards.map(
               );
               add(
                 drawings,
-                "drawings",
                 "draw",
-                "Drawings",
                 (x) => ((x.drawingNumber || "") + " " + (x.title || "")).slice(
                   0,
                   40
@@ -10950,7 +10940,7 @@ ${summaryCards.map(
                 setData: setLinedesign2,
                 selProj
               }
-            ), tab2 === "projdocs" && /* @__PURE__ */ React.createElement(
+            ), "/* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -10964,7 +10954,7 @@ ${summaryCards.map(
                 openEdit,
                 showToast
               }
-            ), tab2 === "projdir" && /* @__PURE__ */ React.createElement(
+            ), ")}", tab2 === "projdir" && /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -10978,7 +10968,7 @@ ${summaryCards.map(
                 openEdit,
                 showToast
               }
-            ), tab2 === "projspecs" && /* @__PURE__ */ React.createElement(
+            ), "/* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -10994,7 +10984,7 @@ ${summaryCards.map(
                 setData: setProjSpecs,
                 selProj
               }
-            ), tab2 === "projforms" && /* @__PURE__ */ React.createElement(
+            ), ")} /* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -11010,7 +11000,7 @@ ${summaryCards.map(
                 setData: setProjForms,
                 selProj
               }
-            ), tab2 === "dochub" && /* @__PURE__ */ React.createElement(DocHubTab, { S, darkMode, projects, selProj }), tab2 === "drawings" && /* @__PURE__ */ React.createElement(
+            ), ")}", tab2 === "dochub" && /* @__PURE__ */ React.createElement(DocHubTab, { S, darkMode, projects, selProj }), "/* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
               DrawingsTab,
               {
                 S,
@@ -11029,7 +11019,7 @@ ${summaryCards.map(
                 punchList,
                 authUser
               }
-            ), tab2 === "changeorders" && /* @__PURE__ */ React.createElement(
+            ), ")}", tab2 === "changeorders" && /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -11558,11 +11548,7 @@ ${summaryCards.map(
                 "qualityinsp",
                 "qualityobs",
                 "qualityforms",
-                "projdocs",
                 "projdir",
-                "projspecs",
-                "projforms",
-                "drawings",
                 "changeorders",
                 "purchaseorders",
                 "meetings",
@@ -15089,7 +15075,6 @@ ${summaryCards.map(
         },
         drawings: {
           icon: "\u{1F4DC}",
-          label: "Drawings",
           color: "#0ea5e9",
           csv: [
             "projectId",
@@ -25125,6 +25110,15 @@ ${summaryCards.map(
           });
         };
         const fmtSize = (b) => b < 1024 ? b + " B" : b < 1048576 ? (b / 1024).toFixed(1) + " KB" : (b / 1048576).toFixed(1) + " MB";
+        const handlePrint = (doc) => {
+          const w = window.open(doc.url, "_blank");
+          if (w) {
+            w.onload = () => {
+              w.focus();
+              w.print();
+            };
+          }
+        };
         const filtered = activeCat === "all" ? docs : docs.filter((d) => d.category === activeCat);
         return /* @__PURE__ */ React.createElement("div", { style: { padding: "24px", maxWidth: 1100, margin: "0 auto" } }, /* @__PURE__ */ React.createElement("div", { style: { marginBottom: 20 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 22, fontWeight: 700, ...S.text } }, "Document Hub"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, ...S.text2, marginTop: 2 } }, "All project documents in one place")), !activeProject && /* @__PURE__ */ React.createElement("div", { style: { border: dark ? "1px solid rgba(255,200,0,0.3)" : "1px solid #fbbf24", borderRadius: 10, padding: "14px 18px", background: dark ? "rgba(251,191,36,0.08)" : "#fffbeb", marginBottom: 20, display: "flex", alignItems: "center", gap: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, fontWeight: 600, color: dark ? "#fbbf24" : "#92400e" } }, "No project selected \uFFFD select a project from the top-right dropdown to upload or manage documents.")), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 } }, CATEGORIES.map((cat) => /* @__PURE__ */ React.createElement("button", { key: cat.id, onClick: () => setActiveCat(cat.id), style: { padding: "6px 16px", borderRadius: 20, border: activeCat === cat.id ? "none" : dark ? "1px solid rgba(255,255,255,0.15)" : "1px solid #d1d5db", background: activeCat === cat.id ? "#2563eb" : "transparent", color: activeCat === cat.id ? "#fff" : dark ? "#cbd5e1" : "#374151", fontWeight: activeCat === cat.id ? 600 : 400, fontSize: 13, cursor: "pointer" } }, cat.label))), activeProject ? /* @__PURE__ */ React.createElement("div", { onDragOver: (e) => {
           e.preventDefault();
@@ -25136,14 +25130,14 @@ ${summaryCards.map(
         }, onClick: () => fileInputRef.current && fileInputRef.current.click(), style: { border: dragOver ? "2px dashed #2563eb" : dark ? "2px dashed rgba(255,255,255,0.15)" : "2px dashed #d1d5db", borderRadius: 12, padding: "36px 24px", textAlign: "center", background: dragOver ? dark ? "rgba(37,99,235,0.1)" : "#eff6ff" : dark ? "rgba(255,255,255,0.02)" : "#f9fafb", cursor: "pointer", marginBottom: 20, transition: "all 0.15s" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32, marginBottom: 8 } }, "+"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 15, fontWeight: 600, ...S.text, marginBottom: 4 } }, "Drop files here or click to browse"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text2, marginBottom: 16 } }, "PDF, Excel, Word, JPG, PNG and more"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 12, ...S.text2 } }, "Category:"), /* @__PURE__ */ React.createElement("select", { value: stagedCat, onChange: (e) => {
           e.stopPropagation();
           setStagedCat(e.target.value);
-        }, onClick: (e) => e.stopPropagation(), style: { fontSize: 12, padding: "4px 8px", borderRadius: 6, border: dark ? "1px solid rgba(255,255,255,0.2)" : "1px solid #d1d5db", background: dark ? "#1e293b" : "#fff", color: dark ? "#e2e8f0" : "#374151" } }, CATEGORIES.filter((c) => c.id !== "all").map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.label)))), /* @__PURE__ */ React.createElement("input", { ref: fileInputRef, type: "file", multiple: true, style: { display: "none" }, onChange: (e) => handleFiles(e.target.files) })) : /* @__PURE__ */ React.createElement("div", { style: { border: dark ? "2px dashed rgba(255,255,255,0.08)" : "2px dashed #e5e7eb", borderRadius: 12, padding: "36px 24px", textAlign: "center", background: dark ? "rgba(255,255,255,0.01)" : "#f9fafb", marginBottom: 20, opacity: 0.5 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32, marginBottom: 8 } }, "+"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, ...S.text2 } }, "Select a project above to enable uploads")), filtered.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "32px", ...S.text2, fontSize: 13 } }, "No documents in this category yet.") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, filtered.map((doc) => /* @__PURE__ */ React.createElement("div", { key: doc.id, style: { display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 10, border: dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid #e5e7eb", background: dark ? "rgba(255,255,255,0.03)" : "#fff" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: "#2563eb", minWidth: 36 } }, doc.type && doc.type.includes("pdf") ? "PDF" : doc.type && doc.type.includes("image") ? "IMG" : "DOC"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, fontWeight: 600, ...S.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, doc.name), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text2 } }, fmtSize(doc.size), " - ", CATEGORIES.find((c) => c.id === doc.category)?.label, " - ", doc.projectName, " - ", doc.uploadedAt)), /* @__PURE__ */ React.createElement("button", { onClick: () => window.open(doc.url, "_blank"), style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid #2563eb", background: "transparent", color: "#2563eb", cursor: "pointer", marginRight: 6 } }, "View"), /* @__PURE__ */ React.createElement("button", { onClick: () => setDocs((prev) => prev.filter((d) => d.id !== doc.id)), style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid #ef4444", background: "transparent", color: "#ef4444", cursor: "pointer" } }, "Remove")))));
+        }, onClick: (e) => e.stopPropagation(), style: { fontSize: 12, padding: "4px 8px", borderRadius: 6, border: dark ? "1px solid rgba(255,255,255,0.2)" : "1px solid #d1d5db", background: dark ? "#1e293b" : "#fff", color: dark ? "#e2e8f0" : "#374151" } }, CATEGORIES.filter((c) => c.id !== "all").map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.label)))), /* @__PURE__ */ React.createElement("input", { ref: fileInputRef, type: "file", multiple: true, style: { display: "none" }, onChange: (e) => handleFiles(e.target.files) })) : /* @__PURE__ */ React.createElement("div", { style: { border: dark ? "2px dashed rgba(255,255,255,0.08)" : "2px dashed #e5e7eb", borderRadius: 12, padding: "36px 24px", textAlign: "center", background: dark ? "rgba(255,255,255,0.01)" : "#f9fafb", marginBottom: 20, opacity: 0.5 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 32, marginBottom: 8 } }, "+"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, ...S.text2 } }, "Select a project above to enable uploads")), filtered.length === 0 ? /* @__PURE__ */ React.createElement("div", { style: { textAlign: "center", padding: "32px", ...S.text2, fontSize: 13 } }, "No documents in this category yet.") : /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, filtered.map((doc) => /* @__PURE__ */ React.createElement("div", { key: doc.id, style: { display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 10, border: dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid #e5e7eb", background: dark ? "rgba(255,255,255,0.03)" : "#fff" } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 13, fontWeight: 700, color: "#2563eb", minWidth: 36 } }, doc.type && doc.type.includes("pdf") ? "PDF" : doc.type && doc.type.includes("image") ? "IMG" : "DOC"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 14, fontWeight: 600, ...S.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, doc.name), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text2 } }, fmtSize(doc.size), " - ", CATEGORIES.find((c) => c.id === doc.category)?.label, " - ", doc.projectName, " - ", doc.uploadedAt)), /* @__PURE__ */ React.createElement("button", { onClick: () => window.open(doc.url, "_blank"), style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid #2563eb", background: "transparent", color: "#2563eb", cursor: "pointer", marginRight: 4 } }, "View"), /* @__PURE__ */ React.createElement("button", { onClick: () => handlePrint(doc), style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid #6366f1", background: "transparent", color: "#6366f1", cursor: "pointer", marginRight: 4 } }, "Print"), /* @__PURE__ */ React.createElement("button", { onClick: () => setDocs((prev) => prev.filter((d) => d.id !== doc.id)), style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid #ef4444", background: "transparent", color: "#ef4444", cursor: "pointer" } }, "Remove")))));
       }
       function DrawingsTab({
         S,
         darkMode,
         projects,
-        drawings,
-        setDrawings,
+        drawings: drawings2,
+        setDrawings: setDrawings2,
         selProj,
         openAdd,
         openEdit,
@@ -25181,7 +25175,7 @@ ${summaryCards.map(
           Approved: { color: "#10b981", icon: "\u2705" }
         };
         function getRevisions(drawingNumber) {
-          return drawings.filter((d) => d.drawingNumber === drawingNumber).sort((a, b) => (a.revision || "").localeCompare(b.revision || ""));
+          return drawings2.filter((d) => d.drawingNumber === drawingNumber).sort((a, b) => (a.revision || "").localeCompare(b.revision || ""));
         }
         function getLatestRevision(drawingNumber) {
           const revs = getRevisions(drawingNumber);
@@ -25193,7 +25187,7 @@ ${summaryCards.map(
         }
         function getUniqueDrawings() {
           const seen = {};
-          const rows = filt(drawings);
+          const rows = filt(drawings2);
           rows.forEach((d) => {
             if (!seen[d.drawingNumber]) {
               seen[d.drawingNumber] = [];
@@ -25210,9 +25204,9 @@ ${summaryCards.map(
           (a, b) => (a.drawingNumber || "").localeCompare(b.drawingNumber || "")
         );
         const disciplines = [
-          ...new Set(drawings.map((d) => d.discipline).filter(Boolean))
+          ...new Set(drawings2.map((d) => d.discipline).filter(Boolean))
         ];
-        const statuses = [...new Set(drawings.map((d) => d.status).filter(Boolean))];
+        const statuses = [...new Set(drawings2.map((d) => d.status).filter(Boolean))];
         function handleFileUpload(e, row) {
           const file = e.target.files[0];
           if (!file) return;
@@ -25222,7 +25216,7 @@ ${summaryCards.map(
           }
           const reader = new FileReader();
           reader.onload = (ev) => {
-            setDrawings(
+            setDrawings2(
               (l) => l.map(
                 (d) => d.id === row.id ? {
                   ...d,
@@ -25273,7 +25267,7 @@ ${summaryCards.map(
             return;
           }
           const base = uploadRevModal;
-          setDrawings(
+          setDrawings2(
             (l) => l.map((d) => {
               if (d.drawingNumber === base.drawingNumber && d.id !== base.id) {
                 return { ...d, status: "Superseded", isSuperseded: true };
@@ -25300,7 +25294,7 @@ ${summaryCards.map(
             annotations: []
             // fresh markups for new revision
           };
-          setDrawings((l) => [...l, newRev]);
+          setDrawings2((l) => [...l, newRev]);
           setUploadRevModal(null);
           setRevForm({ revision: "", description: "" });
           showToast(
@@ -25330,7 +25324,7 @@ ${summaryCards.map(
             createdAt: today2,
             createdBy: currentUser2
           };
-          setDrawings(
+          setDrawings2(
             (l) => l.map(
               (d) => d.id === addPinModal.drawingId ? { ...d, annotations: [...d.annotations || [], pin] } : d
             )
@@ -25351,7 +25345,7 @@ ${summaryCards.map(
             );
             return;
           }
-          setDrawings(
+          setDrawings2(
             (l) => l.map(
               (d) => d.id === drawingId ? {
                 ...d,
@@ -25395,12 +25389,12 @@ ${summaryCards.map(
               gap: 10
             }
           },
-          /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 18, fontWeight: 700, ...S.text } }, "\u{1F4DC} Drawings"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text3, marginTop: 2 } }, uniqueDrawings.length, " drawing", uniqueDrawings.length !== 1 ? "s" : "", " \xB7", " ", drawings.filter((d) => d.isSuperseded).length, " superseded revisions archived")),
+          /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 18, fontWeight: 700, ...S.text } }, "\u{1F4DC} Drawings"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text3, marginTop: 2 } }, uniqueDrawings.length, " drawing", uniqueDrawings.length !== 1 ? "s" : "", " \xB7", " ", drawings2.filter((d) => d.isSuperseded).length, " superseded revisions archived")),
           /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement(
             "button",
             {
               onClick: () => exp(
-                drawings,
+                drawings2,
                 [
                   "drawingNumber",
                   "title",
@@ -25420,7 +25414,6 @@ ${summaryCards.map(
           ), /* @__PURE__ */ React.createElement(
             "button",
             {
-              onClick: () => openAdd("drawings"),
               style: { ...S.btnP, background: "#0ea5e9" }
             },
             "+ Add Drawing"
@@ -25497,7 +25490,6 @@ ${summaryCards.map(
           /* @__PURE__ */ React.createElement(
             "button",
             {
-              onClick: () => openAdd("drawings"),
               style: { ...S.btnP, background: "#0ea5e9" }
             },
             "+ Add First Drawing"
@@ -25752,7 +25744,6 @@ ${summaryCards.map(
                     {
                       onClick: (e) => {
                         e.stopPropagation();
-                        openEdit("drawings", row);
                       },
                       style: {
                         ...S.btnS,
@@ -26292,7 +26283,7 @@ ${summaryCards.map(
                       ))
                         setViewer((v) => {
                           const updated = { ...v, annotations: [] };
-                          setDrawings(
+                          setDrawings2(
                             (l) => l.map((d) => d.id === v.id ? updated : d)
                           );
                           return updated;
