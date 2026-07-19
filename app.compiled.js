@@ -2606,6 +2606,10 @@ ${summaryCards.map(
         const [qualityForms, setQualityForms] = usePersist("qualityForms", []);
         const [projDir, setProjDir] = usePersist("projDir", []);
         const [changeOrders, setChangeOrders] = usePersist("changeOrders", []);
+        const [projDocs, setProjDocs] = usePersist("projDocs", []);
+        const [projSpecs, setProjSpecs] = usePersist("projSpecs", []);
+        const [projForms, setProjForms] = usePersist("projForms", []);
+        const [drawings, setDrawings] = usePersist("drawings", []);
         const [purchaseOrders, setPurchaseOrders] = usePersist("purchaseOrders", []);
         const [settings, setSettings] = usePersist("settings", {
           companyName: "KoDox Systems LLC",
@@ -25136,8 +25140,8 @@ ${summaryCards.map(
         S,
         darkMode,
         projects,
-        drawings: drawings2,
-        setDrawings: setDrawings2,
+        drawings,
+        setDrawings,
         selProj,
         openAdd,
         openEdit,
@@ -25175,7 +25179,7 @@ ${summaryCards.map(
           Approved: { color: "#10b981", icon: "\u2705" }
         };
         function getRevisions(drawingNumber) {
-          return drawings2.filter((d) => d.drawingNumber === drawingNumber).sort((a, b) => (a.revision || "").localeCompare(b.revision || ""));
+          return drawings.filter((d) => d.drawingNumber === drawingNumber).sort((a, b) => (a.revision || "").localeCompare(b.revision || ""));
         }
         function getLatestRevision(drawingNumber) {
           const revs = getRevisions(drawingNumber);
@@ -25187,7 +25191,7 @@ ${summaryCards.map(
         }
         function getUniqueDrawings() {
           const seen = {};
-          const rows = filt(drawings2);
+          const rows = filt(drawings);
           rows.forEach((d) => {
             if (!seen[d.drawingNumber]) {
               seen[d.drawingNumber] = [];
@@ -25204,9 +25208,9 @@ ${summaryCards.map(
           (a, b) => (a.drawingNumber || "").localeCompare(b.drawingNumber || "")
         );
         const disciplines = [
-          ...new Set(drawings2.map((d) => d.discipline).filter(Boolean))
+          ...new Set(drawings.map((d) => d.discipline).filter(Boolean))
         ];
-        const statuses = [...new Set(drawings2.map((d) => d.status).filter(Boolean))];
+        const statuses = [...new Set(drawings.map((d) => d.status).filter(Boolean))];
         function handleFileUpload(e, row) {
           const file = e.target.files[0];
           if (!file) return;
@@ -25216,7 +25220,7 @@ ${summaryCards.map(
           }
           const reader = new FileReader();
           reader.onload = (ev) => {
-            setDrawings2(
+            setDrawings(
               (l) => l.map(
                 (d) => d.id === row.id ? {
                   ...d,
@@ -25267,7 +25271,7 @@ ${summaryCards.map(
             return;
           }
           const base = uploadRevModal;
-          setDrawings2(
+          setDrawings(
             (l) => l.map((d) => {
               if (d.drawingNumber === base.drawingNumber && d.id !== base.id) {
                 return { ...d, status: "Superseded", isSuperseded: true };
@@ -25294,7 +25298,7 @@ ${summaryCards.map(
             annotations: []
             // fresh markups for new revision
           };
-          setDrawings2((l) => [...l, newRev]);
+          setDrawings((l) => [...l, newRev]);
           setUploadRevModal(null);
           setRevForm({ revision: "", description: "" });
           showToast(
@@ -25324,7 +25328,7 @@ ${summaryCards.map(
             createdAt: today2,
             createdBy: currentUser2
           };
-          setDrawings2(
+          setDrawings(
             (l) => l.map(
               (d) => d.id === addPinModal.drawingId ? { ...d, annotations: [...d.annotations || [], pin] } : d
             )
@@ -25345,7 +25349,7 @@ ${summaryCards.map(
             );
             return;
           }
-          setDrawings2(
+          setDrawings(
             (l) => l.map(
               (d) => d.id === drawingId ? {
                 ...d,
@@ -25389,12 +25393,12 @@ ${summaryCards.map(
               gap: 10
             }
           },
-          /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 18, fontWeight: 700, ...S.text } }, "\u{1F4DC} Drawings"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text3, marginTop: 2 } }, uniqueDrawings.length, " drawing", uniqueDrawings.length !== 1 ? "s" : "", " \xB7", " ", drawings2.filter((d) => d.isSuperseded).length, " superseded revisions archived")),
+          /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 18, fontWeight: 700, ...S.text } }, "\u{1F4DC} Drawings"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 12, ...S.text3, marginTop: 2 } }, uniqueDrawings.length, " drawing", uniqueDrawings.length !== 1 ? "s" : "", " \xB7", " ", drawings.filter((d) => d.isSuperseded).length, " superseded revisions archived")),
           /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } }, /* @__PURE__ */ React.createElement(
             "button",
             {
               onClick: () => exp(
-                drawings2,
+                drawings,
                 [
                   "drawingNumber",
                   "title",
@@ -26283,7 +26287,7 @@ ${summaryCards.map(
                       ))
                         setViewer((v) => {
                           const updated = { ...v, annotations: [] };
-                          setDrawings2(
+                          setDrawings(
                             (l) => l.map((d) => d.id === v.id ? updated : d)
                           );
                           return updated;
