@@ -10944,7 +10944,7 @@ ${summaryCards.map(
                 setData: setLinedesign2,
                 selProj
               }
-            ), "/* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
+            ), tab2 === "projdocs" && /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -10958,7 +10958,7 @@ ${summaryCards.map(
                 openEdit,
                 showToast
               }
-            ), ")}", tab2 === "projdir" && /* @__PURE__ */ React.createElement(
+            ), tab2 === "projdir" && /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -10972,7 +10972,7 @@ ${summaryCards.map(
                 openEdit,
                 showToast
               }
-            ), "/* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
+            ), tab2 === "projspecs" && /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -10988,7 +10988,7 @@ ${summaryCards.map(
                 setData: setProjSpecs,
                 selProj
               }
-            ), ")} /* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
+            ), tab2 === "projforms" && /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
@@ -11004,7 +11004,7 @@ ${summaryCards.map(
                 setData: setProjForms,
                 selProj
               }
-            ), ")}", tab2 === "dochub" && /* @__PURE__ */ React.createElement(DocHubTab, { S, darkMode, projects, selProj }), "/* @__PURE__ */ ", /* @__PURE__ */ React.createElement(
+            ), tab2 === "dochub" && /* @__PURE__ */ React.createElement(DocHubTab, { S, darkMode, projects, selProj }), tab2 === "drawings" && /* @__PURE__ */ React.createElement(
               DrawingsTab,
               {
                 S,
@@ -11023,7 +11023,7 @@ ${summaryCards.map(
                 punchList,
                 authUser
               }
-            ), ")}", tab2 === "changeorders" && /* @__PURE__ */ React.createElement(
+            ), tab2 === "changeorders" && /* @__PURE__ */ React.createElement(
               NewSecTab,
               {
                 tab: tab2,
